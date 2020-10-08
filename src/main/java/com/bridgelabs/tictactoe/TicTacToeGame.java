@@ -8,8 +8,24 @@ import org.apache.logging.log4j.Logger;
 public class TicTacToeGame {
 	private static final int head=0;
 	private static final int tail=1;
+	static char playerLetter, computerLetter;
+	static Players playerToMove;
+	private static int[][] winningCombinations=new int[][] {
+		{0,1,2},
+		{3,4,5},
+		{6,7,8},
+		{0,3,6},
+		{1,4,7},
+		{2,5,8},
+		{0,4,8},
+		{2,4,6}
+	};
 	public enum Players{
 		PLAYER, COMPUTER
+	}
+	
+	public enum GameStatus{
+		TIE, PLAYER_WON, COMPUTER_WON, CHANGE_TURN
 	}
 	static final Logger logger = LogManager.getLogger(TicTacToeGame.class);
 	/**
@@ -108,10 +124,34 @@ public class TicTacToeGame {
 		}
 	}
 	
+	/**
+	 * uc7
+	 * @param letter
+	 * @param board
+	 * @return
+	 */
+	public static GameStatus getGameStatus(char letter, char[] board) {
+		for(int [] combination: winningCombinations) {
+			if((board[combination[0]]==letter)&&(board[combination[1]]==letter)&&(board[combination[2]]==letter)){
+				if(letter==playerLetter) {
+					return GameStatus.PLAYER_WON;
+				}
+				else {
+					return GameStatus.COMPUTER_WON;
+				}
+			}
+		}
+		for(int position=0;position<board.length-1;position++) {
+			if(board[position]==' ') {
+				return GameStatus.CHANGE_TURN;
+			}
+		}
+		return GameStatus.TIE;
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		char[] board= setUpBoard();
-		char playerLetter, computerLetter;
 		char playerChoice=chooseLetter(sc);
 		if(playerChoice=='X') {
 			playerLetter='X';
@@ -122,16 +162,42 @@ public class TicTacToeGame {
 			computerLetter='X';
 		}
 		Players firstToMove=getWhoStartsFirst();
-		if(firstToMove==Players.PLAYER) {
-			displayBoard(board);
-			int desiredPosition=getPlayersMovePosition(sc, board);
-			board=makeMove(desiredPosition, playerLetter, board);
-		}else {
-			displayBoard(board);
-			int desiredPosition=getPlayersMovePosition(sc, board);
-			board=makeMove(desiredPosition, computerLetter, board);
-		}		
-		displayBoard(board);
+		playerToMove=firstToMove;
+		while(true) {
+			GameStatus gameStatus;
+			if(playerToMove==Players.PLAYER) {
+				displayBoard(board);
+				int desiredPosition=getPlayersMovePosition(sc, board);
+				makeMove(desiredPosition, playerLetter, board);
+				gameStatus=getGameStatus(playerLetter, board);
+			}
+			else {
+				displayBoard(board);
+				int desiredPosition=getPlayersMovePosition(sc, board);
+				makeMove(desiredPosition, computerLetter, board);
+				gameStatus=getGameStatus(computerLetter, board);
+			}
+			if(gameStatus==GameStatus.PLAYER_WON) {
+				logger.info("Player won.");
+				displayBoard(board);
+				break;
+			}else if(gameStatus==GameStatus.COMPUTER_WON) {
+				logger.info("Computer won.");
+				displayBoard(board);
+				break;
+			}else if(gameStatus==GameStatus.CHANGE_TURN) {
+				if(playerToMove==Players.PLAYER) {
+					playerToMove=Players.COMPUTER;
+				}else {
+					playerToMove=Players.PLAYER;
+				}
+			}else if(gameStatus==GameStatus.TIE) {
+				logger.info("Game ended in a tie.");
+				break;
+			}
+			
+		}
+		
 		
 	}
 }
