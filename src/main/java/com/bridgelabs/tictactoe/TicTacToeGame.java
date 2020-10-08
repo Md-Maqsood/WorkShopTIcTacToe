@@ -20,6 +20,7 @@ public class TicTacToeGame {
 		{0,4,8},
 		{2,4,6}
 	};
+	private static final int[] cornerPositions=new int[] {0,2,6,8};
 	public enum Players{
 		PLAYER, COMPUTER
 	}
@@ -157,7 +158,7 @@ public class TicTacToeGame {
 	public static int searchForWinningPosition(char[] board) {
 		char[] dummyBoard=board.clone();
 		for(int position=0;position<dummyBoard.length;position++) {
-			if(dummyBoard[position]==' ') {
+			if(checkIfPositionIsAvailable(position, dummyBoard)) {
 				dummyBoard=makeMove(position, computerLetter, dummyBoard);
 				if(getGameStatus(computerLetter, dummyBoard)==GameStatus.COMPUTER_WON) {
 					return position;
@@ -186,6 +187,11 @@ public class TicTacToeGame {
 			board=makeMove(desiredPosition, computerLetter, board);
 			return board;
 		}
+		desiredPosition=takeAvailableCorner(board);
+		if(desiredPosition!=-1) {
+			board=makeMove(desiredPosition, computerLetter, board);
+			return board;
+		}
 		desiredPosition=getPlayersMovePosition(sc, board);
 		board=makeMove(desiredPosition, computerLetter, board);
 		return board;
@@ -198,11 +204,22 @@ public class TicTacToeGame {
 	public static int searchForBlockingPosition(char[] board) {
 		char[] dummyBoard=board.clone();
 		for(int position=0;position<dummyBoard.length-1;position++) {
-			dummyBoard=makeMove(position, playerLetter, dummyBoard);
-			if(getGameStatus(playerLetter, dummyBoard)==GameStatus.PLAYER_WON) {
+			if(checkIfPositionIsAvailable(position, dummyBoard)) {
+				dummyBoard=makeMove(position, playerLetter, dummyBoard);
+				if(getGameStatus(playerLetter, dummyBoard)==GameStatus.PLAYER_WON) {
+					return position;
+				}else {
+					dummyBoard=board.clone();
+				}
+			}
+		}
+		return -1;
+	}
+	
+	public static int takeAvailableCorner(char[] board) {
+		for(int position: cornerPositions) {
+			if(checkIfPositionIsAvailable(position, board)) {
 				return position;
-			}else {
-				dummyBoard=board.clone();
 			}
 		}
 		return -1;
@@ -233,6 +250,8 @@ public class TicTacToeGame {
 			else {
 				displayBoard(board);
 				board=computerMakesMove(sc, board);
+				logger.info("Board after computer's move: ");
+				displayBoard(board);
 				gameStatus=getGameStatus(computerLetter, board);
 			}
 			if(gameStatus==GameStatus.PLAYER_WON) {
