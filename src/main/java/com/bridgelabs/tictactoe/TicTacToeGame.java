@@ -181,9 +181,31 @@ public class TicTacToeGame {
 			board=makeMove(desiredPosition, computerLetter, board);
 			return board;
 		}
+		desiredPosition=searchForBlockingPosition(board);
+		if(desiredPosition!=-1) {
+			board=makeMove(desiredPosition, computerLetter, board);
+			return board;
+		}
 		desiredPosition=getPlayersMovePosition(sc, board);
 		board=makeMove(desiredPosition, computerLetter, board);
 		return board;
+	}
+	
+	/**uc9
+	 * @param board
+	 * @return
+	 */
+	public static int searchForBlockingPosition(char[] board) {
+		char[] dummyBoard=board.clone();
+		for(int position=0;position<dummyBoard.length-1;position++) {
+			dummyBoard=makeMove(position, playerLetter, dummyBoard);
+			if(getGameStatus(playerLetter, dummyBoard)==GameStatus.PLAYER_WON) {
+				return position;
+			}else {
+				dummyBoard=board.clone();
+			}
+		}
+		return -1;
 	}
 	
 	public static void main(String[] args) {
