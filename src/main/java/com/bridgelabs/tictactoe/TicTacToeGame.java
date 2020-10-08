@@ -60,7 +60,7 @@ public class TicTacToeGame {
 	 * uc3
 	 * 
 	 * @param board
-	 */y
+	 */
 	public static void displayBoard(char[] board) {
 		for (int i = 0; i < board.length - 1; i++) {
 			System.out.print(board[i] + " ");
@@ -260,9 +260,12 @@ public class TicTacToeGame {
 		return -1;
 	}
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		char[] board = setUpBoard();
+	/**
+	 * uc12
+	 * 
+	 * @param sc
+	 */
+	public static void assignLetters(Scanner sc) {
 		char playerChoice = chooseLetter(sc);
 		if (playerChoice == 'X') {
 			playerLetter = 'X';
@@ -271,8 +274,15 @@ public class TicTacToeGame {
 			playerLetter = 'O';
 			computerLetter = 'X';
 		}
-		Players firstToMove = getWhoStartsFirst();
-		playerToMove = firstToMove;
+	}
+
+	/**
+	 * uc12
+	 * 
+	 * @param sc
+	 * @param board
+	 */
+	public static void playGame(Scanner sc, char[] board) {
 		while (true) {
 			GameStatus gameStatus;
 			if (playerToMove == Players.PLAYER) {
@@ -305,8 +315,14 @@ public class TicTacToeGame {
 				displayBoard(board);
 				break;
 			}
-
 		}
+	}
 
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		char[] board = setUpBoard();
+		assignLetters(sc);
+		playerToMove = getWhoStartsFirst();
+		playGame(sc, board);
 	}
 }
