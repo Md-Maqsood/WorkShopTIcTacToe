@@ -149,6 +149,43 @@ public class TicTacToeGame {
 		return GameStatus.TIE;
 	}
 	
+	/**
+	 * uc8
+	 * @param board
+	 * @return
+	 */
+	public static int searchForWinningPosition(char[] board) {
+		char[] dummyBoard=board.clone();
+		for(int position=0;position<dummyBoard.length;position++) {
+			if(dummyBoard[position]==' ') {
+				dummyBoard=makeMove(position, computerLetter, dummyBoard);
+				if(getGameStatus(computerLetter, dummyBoard)==GameStatus.COMPUTER_WON) {
+					return position;
+				}else {
+					dummyBoard=board.clone();
+				}
+			}
+		}
+		return -1;
+	}
+	
+	/**
+	 * uc8
+	 * @param sc
+	 * @param board
+	 * @return
+	 */
+	public static char[] computerMakesMove(Scanner sc,char[] board) {
+		int desiredPosition=searchForWinningPosition(board);
+		if(desiredPosition!=-1) {
+			board=makeMove(desiredPosition, computerLetter, board);
+			return board;
+		}
+		desiredPosition=getPlayersMovePosition(sc, board);
+		board=makeMove(desiredPosition, computerLetter, board);
+		return board;
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		char[] board= setUpBoard();
@@ -168,13 +205,12 @@ public class TicTacToeGame {
 			if(playerToMove==Players.PLAYER) {
 				displayBoard(board);
 				int desiredPosition=getPlayersMovePosition(sc, board);
-				makeMove(desiredPosition, playerLetter, board);
+				board=makeMove(desiredPosition, playerLetter, board);
 				gameStatus=getGameStatus(playerLetter, board);
 			}
 			else {
 				displayBoard(board);
-				int desiredPosition=getPlayersMovePosition(sc, board);
-				makeMove(desiredPosition, computerLetter, board);
+				board=computerMakesMove(sc, board);
 				gameStatus=getGameStatus(computerLetter, board);
 			}
 			if(gameStatus==GameStatus.PLAYER_WON) {
