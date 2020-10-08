@@ -55,7 +55,7 @@ public class TicTacToeGame {
 	 * @param board
 	 * @return
 	 */
-	public static boolean positionIsFree(int position, char[] board) {
+	public static boolean checkIfPositionIsAvailable(int position, char[] board) {
 		return board[position]==' ';
 	}
 	
@@ -69,12 +69,24 @@ public class TicTacToeGame {
 		while(true) {
 			logger.info("Select the index from 1 to 9");
 			int position=sc.nextInt()-1;
-			if(positionIsFree(position, board)) {
+			if(checkIfPositionIsAvailable(position, board)) {
 				return position;
 			}else {
 				logger.info("Selected index is already filled");
 			}
 		}
+	}
+	
+	/**
+	 * uc5
+	 * @param position
+	 * @param letter
+	 * @param board
+	 * @return
+	 */
+	public static char[] makeMove(int position, char letter, char[] board) {
+		board[position]=letter;
+		return board;
 	}
 	
 	public static void main(String[] args) {
@@ -92,7 +104,8 @@ public class TicTacToeGame {
 		}
 		displayBoard(board);
 		int desiredPosition=getPlayersMovePosition(sc, board);
-		
+		board=makeMove(desiredPosition, playerLetter, board);
+		displayBoard(board);
 		
 	}
 }
