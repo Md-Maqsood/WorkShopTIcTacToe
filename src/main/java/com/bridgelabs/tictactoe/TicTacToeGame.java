@@ -13,6 +13,8 @@ public class TicTacToeGame {
 	private static int[][] winningCombinations = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 },
 			{ 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
 	private static final int[] cornerPositions = new int[] { 0, 2, 6, 8 };
+	private static final int[] sidePositions =new int[] {1,3,5,7};
+	private static final int centerPosition=4;
 
 	public enum Players {
 		PLAYER, COMPUTER
@@ -197,8 +199,10 @@ public class TicTacToeGame {
 			board = makeMove(desiredPosition, computerLetter, board);
 			return board;
 		}
-		desiredPosition = getPlayersMovePosition(sc, board);
-		board = makeMove(desiredPosition, computerLetter, board);
+		desiredPosition = takeSubsequentChoices(board);
+		if (desiredPosition != -1) {
+			board = makeMove(desiredPosition, computerLetter, board);
+		}
 		return board;
 	}
 
@@ -237,6 +241,23 @@ public class TicTacToeGame {
 		}
 		return -1;
 	}
+	
+	/**
+	 * uc11
+	 * @param board
+	 * @return
+	 */
+	public static int takeSubsequentChoices(char[] board) {
+		if(checkIfPositionIsAvailable(centerPosition, board)) {
+			return centerPosition;
+		}
+		for(int position:sidePositions) {
+			if(checkIfPositionIsAvailable(position, board)) {
+				return position;
+			}
+		}
+		return -1;
+	}
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -261,8 +282,6 @@ public class TicTacToeGame {
 			} else {
 				displayBoard(board);
 				board = computerMakesMove(sc, board);
-				logger.info("Board after computer's move: ");
-				displayBoard(board);
 				gameStatus = getGameStatus(computerLetter, board);
 			}
 			if (gameStatus == GameStatus.PLAYER_WON) {
@@ -281,6 +300,8 @@ public class TicTacToeGame {
 				}
 			} else if (gameStatus == GameStatus.TIE) {
 				logger.info("Game ended in a tie.");
+				logger.info("Final Board: ");
+				displayBoard(board);
 				break;
 			}
 
