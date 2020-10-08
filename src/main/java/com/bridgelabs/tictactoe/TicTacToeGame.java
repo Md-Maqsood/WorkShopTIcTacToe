@@ -157,7 +157,7 @@ public class TicTacToeGame {
 	public static int searchForWinningPosition(char[] board) {
 		char[] dummyBoard=board.clone();
 		for(int position=0;position<dummyBoard.length;position++) {
-			if(dummyBoard[position]==' ') {
+			if(checkIfPositionIsAvailable(position, dummyBoard)) {
 				dummyBoard=makeMove(position, computerLetter, dummyBoard);
 				if(getGameStatus(computerLetter, dummyBoard)==GameStatus.COMPUTER_WON) {
 					return position;
@@ -198,11 +198,13 @@ public class TicTacToeGame {
 	public static int searchForBlockingPosition(char[] board) {
 		char[] dummyBoard=board.clone();
 		for(int position=0;position<dummyBoard.length-1;position++) {
-			dummyBoard=makeMove(position, playerLetter, dummyBoard);
-			if(getGameStatus(playerLetter, dummyBoard)==GameStatus.PLAYER_WON) {
-				return position;
-			}else {
-				dummyBoard=board.clone();
+			if(checkIfPositionIsAvailable(position, dummyBoard)) {
+				dummyBoard=makeMove(position, playerLetter, dummyBoard);
+				if(getGameStatus(playerLetter, dummyBoard)==GameStatus.PLAYER_WON) {
+					return position;
+				}else {
+					dummyBoard=board.clone();
+				}
 			}
 		}
 		return -1;
