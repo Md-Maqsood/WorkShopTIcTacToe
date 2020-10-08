@@ -39,10 +39,21 @@ public class TicTacToeGame {
 			}
 		}
 	}
+	
+	public static char[] makeMove(Scanner sc,char letter, char[] board) {
+		logger.info("Select the index from 1 to 9");
+		int positionIndex=Integer.parseInt(sc.nextLine());
+		if(board[positionIndex-1]==' ') {
+			board[positionIndex-1]=letter;
+		}else {
+			logger.info("Selected index is already filled");
+		}
+		return board;
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		char[] board= setUpBoard();
-		displayBoard(board);
 		char playerLetter, computerLetter;
 		char playerChoice=chooseLetter(sc);
 		if(playerChoice=='X') {
@@ -53,6 +64,9 @@ public class TicTacToeGame {
 			playerLetter='O';
 			computerLetter='X';
 		}
+		displayBoard(board);
+		board=makeMove(sc, playerLetter, board);
+		displayBoard(board);
 		
 		
 	}
