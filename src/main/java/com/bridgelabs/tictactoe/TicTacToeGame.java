@@ -6,6 +6,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class TicTacToeGame {
+	
+	public enum Players{
+		PLAYER, COMPUTER
+	}
 	static final Logger logger = LogManager.getLogger(TicTacToeGame.class);
 	/**
 	 * uc1
@@ -89,6 +93,19 @@ public class TicTacToeGame {
 		return board;
 	}
 	
+	public static Players tossToChooseFirstMover() {
+		int head=0;
+		int tail=1;
+		int a=(int)(Math.floor(Math.random()*10)) % 2;
+		if(a==head) {
+			logger.info("Player moves first");
+			return Players.PLAYER;
+		}else {
+			logger.info("Computer moves first");
+			return Players.COMPUTER;
+		}
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		char[] board= setUpBoard();
@@ -102,9 +119,16 @@ public class TicTacToeGame {
 			playerLetter='O';
 			computerLetter='X';
 		}
-		displayBoard(board);
-		int desiredPosition=getPlayersMovePosition(sc, board);
-		board=makeMove(desiredPosition, playerLetter, board);
+		Players firstToMove=tossToChooseFirstMover();
+		if(firstToMove==Players.PLAYER) {
+			displayBoard(board);
+			int desiredPosition=getPlayersMovePosition(sc, board);
+			board=makeMove(desiredPosition, playerLetter, board);
+		}else {
+			displayBoard(board);
+			int desiredPosition=getPlayersMovePosition(sc, board);
+			board=makeMove(desiredPosition, computerLetter, board);
+		}		
 		displayBoard(board);
 		
 	}
