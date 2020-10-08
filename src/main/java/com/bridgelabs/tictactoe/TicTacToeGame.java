@@ -13,8 +13,8 @@ public class TicTacToeGame {
 	private static int[][] winningCombinations = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 },
 			{ 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
 	private static final int[] cornerPositions = new int[] { 0, 2, 6, 8 };
-	private static final int[] sidePositions =new int[] {1,3,5,7};
-	private static final int centerPosition=4;
+	private static final int[] sidePositions = new int[] { 1, 3, 5, 7 };
+	private static final int centerPosition = 4;
 
 	public enum Players {
 		PLAYER, COMPUTER
@@ -60,7 +60,7 @@ public class TicTacToeGame {
 	 * uc3
 	 * 
 	 * @param board
-	 */
+	 */y
 	public static void displayBoard(char[] board) {
 		for (int i = 0; i < board.length - 1; i++) {
 			System.out.print(board[i] + " ");
@@ -241,18 +241,19 @@ public class TicTacToeGame {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * uc11
+	 * 
 	 * @param board
 	 * @return
 	 */
 	public static int takeSubsequentChoices(char[] board) {
-		if(checkIfPositionIsAvailable(centerPosition, board)) {
+		if (checkIfPositionIsAvailable(centerPosition, board)) {
 			return centerPosition;
 		}
-		for(int position:sidePositions) {
-			if(checkIfPositionIsAvailable(position, board)) {
+		for (int position : sidePositions) {
+			if (checkIfPositionIsAvailable(position, board)) {
 				return position;
 			}
 		}
