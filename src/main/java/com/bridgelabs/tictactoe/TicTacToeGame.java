@@ -30,9 +30,19 @@ public class TicTacToeGame {
 		}
 		return playerChoice;
 	}
+	
+	public static void displayBoard(char[] board) {
+		for(int i=0;i<board.length-1;i++) {
+			System.out.print(board[i]+" ");
+			if(i%3==2) {
+				System.out.println();
+			}
+		}
+	}
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		char[] board= setUpBoard();
+		displayBoard(board);
 		char playerLetter, computerLetter;
 		char playerChoice=chooseLetter(sc);
 		if(playerChoice=='X') {
