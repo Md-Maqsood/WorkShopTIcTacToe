@@ -19,6 +19,11 @@ public class TicTacToeGame {
 		return board;
 	}
 	
+	/**
+	 * uc2
+	 * @param sc
+	 * @return
+	 */
 	public static char chooseLetter(Scanner sc) {
 		logger.info("Enter the letter choice ('X' or 'O'): ");
 		char playerChoice=sc.nextLine().charAt(0);
@@ -31,6 +36,10 @@ public class TicTacToeGame {
 		return playerChoice;
 	}
 	
+	/**
+	 * uc3
+	 * @param board
+	 */
 	public static void displayBoard(char[] board) {
 		for(int i=0;i<board.length-1;i++) {
 			System.out.print(board[i]+" ");
@@ -39,16 +48,32 @@ public class TicTacToeGame {
 			}
 		}
 	}
-	
-	public static char[] makeMove(Scanner sc,char letter, char[] board) {
-		logger.info("Select the index from 1 to 9");
-		int positionIndex=Integer.parseInt(sc.nextLine());
-		if(board[positionIndex-1]==' ') {
-			board[positionIndex-1]=letter;
-		}else {
-			logger.info("Selected index is already filled");
+
+	/**
+	 * uc4
+	 * @param position
+	 * @param board
+	 * @return
+	 */
+	public static boolean positionIsFree(int position, char[] board) {
+		return board[position]==' ';
+	}
+	/**
+	 * uc4
+	 * @param sc
+	 * @param board
+	 * @return
+	 */
+	public static int getPlayersMovePosition(Scanner sc, char[] board) {
+		while(true) {
+			logger.info("Select the index from 1 to 9");
+			int position=sc.nextInt()-1;
+			if(positionIsFree(position, board)) {
+				return position;
+			}else {
+				logger.info("Selected index is already filled");
+			}
 		}
-		return board;
 	}
 	
 	public static void main(String[] args) {
@@ -65,8 +90,7 @@ public class TicTacToeGame {
 			computerLetter='X';
 		}
 		displayBoard(board);
-		board=makeMove(sc, playerLetter, board);
-		displayBoard(board);
+		int desiredPosition=getPlayersMovePosition(sc, board);
 		
 		
 	}
