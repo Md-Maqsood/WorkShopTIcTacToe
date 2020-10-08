@@ -58,6 +58,7 @@ public class TicTacToeGame {
 	public static boolean positionIsFree(int position, char[] board) {
 		return board[position]==' ';
 	}
+	
 	/**
 	 * uc4
 	 * @param sc
