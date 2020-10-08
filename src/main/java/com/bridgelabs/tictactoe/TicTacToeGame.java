@@ -318,11 +318,26 @@ public class TicTacToeGame {
 		}
 	}
 
+	/**
+	 * uc13
+	 * 
+	 * @param sc
+	 * @return
+	 */
+	public static boolean checkIfUserWantsAnotherGame(Scanner sc) {
+		logger.info("Do you want to play another game ?\n1. Yes\n2. No\nEnter your choice: ");
+		boolean choice = (sc.nextInt() == 1) ? true : false;
+		sc.nextLine();
+		return choice;
+	}
+
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		char[] board = setUpBoard();
-		assignLetters(sc);
-		playerToMove = getWhoStartsFirst();
-		playGame(sc, board);
+		do {
+			char[] board = setUpBoard();
+			assignLetters(sc);
+			playerToMove = getWhoStartsFirst();
+			playGame(sc, board);
+		} while (checkIfUserWantsAnotherGame(sc));
 	}
 }
